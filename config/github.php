@@ -42,7 +42,7 @@ return [
 
         'main' => [
             'method'     => 'token',
-            'token'      => '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',
+            'token'      => env('GITHUB_TOKEN', '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'),
             // 'backoff'    => false,
             // 'cache'      => false,
             // 'version'    => 'v3',

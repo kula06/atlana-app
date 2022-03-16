@@ -62,7 +62,9 @@ class GithubUserService
     {
         $user = $this->processUser($user);
 
-        return GithubUser::updateOrCreate(Arr::only($user, 'id'), $user);
+        $githubUser = GithubUser::updateOrCreate(Arr::only($user, 'id'), $user);
+
+        return $githubUser->loadCount('repositories');
     }
 
     private function fillUsers(array $users): array

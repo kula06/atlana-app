@@ -1,0 +1,190 @@
+swagger: "2.0"
+info:
+  description: ""
+  version: "1.0.0"
+  title: "Github Searcher"
+  contact:
+    email: "alex@cloudfeel.ru"
+
+basePath: "/api"
+tags:
+  - name: github
+    description: ""
+schemes:
+  - "http"
+paths:
+  /search:
+    get:
+      tags:
+        - github
+      summary: "Search for Users"
+      description: ""
+      operationId: search
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: query
+          name: query
+          description: "Query string"
+          required: false
+          type: string
+      responses:
+        "200":
+          description: "Users list"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/GithubUser"
+  /user/{username}:
+    get:
+      tags:
+        - github
+      summary: "User details"
+      description: ""
+      operationId: user
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: path
+          name: username
+          description: "User login"
+          required: true
+          type: string
+      responses:
+        "200":
+          description: "User details"
+          schema:
+            $ref: "#/definitions/GithubUser"
+  /user/{username}/repositories:
+    get:
+      tags:
+        - github
+      summary: "Search for User's Repositories"
+      description: ""
+      operationId: user_repositories
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: path
+          name: username
+          description: "User login"
+          required: true
+          type: string
+        - in: query
+          name: query
+          description: "Query string"
+          required: false
+          type: string
+      responses:
+        "200":
+          description: "User repositories list"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/GithubUserRepository"
+  /users:
+    get:
+      tags:
+        - github
+      summary: "Users list"
+      description: ""
+      operationId: users
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: query
+          name: sort
+          description: "Sort by"
+          required: false
+          type: string
+          enum: [repositories, followers, popularity]
+          default: repositories
+        - in: query
+          name: direction
+          description: "Direction sort"
+          required: false
+          type: string
+          enum: [DESC, ASC]
+          default: DESC
+        - in: query
+          name: page
+          description: "Page number"
+          required: false
+          type: integer
+      responses:
+        "200":
+          description: "Users list"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/GithubUser"
+  /most_popular_users:
+    get:
+      tags:
+        - github
+      summary: "3 most popular users"
+      description: ""
+      operationId: most_popular_users
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: query
+          name: date
+          description: "Дата"
+          required: false
+          type: string
+          example: '2022-03-16'
+      responses:
+        "200":
+          description: "Users list"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/GithubUser"
+
+definitions:
+  GithubUser:
+    type: object
+    properties:
+      id:
+        type: integer
+      login:
+        type: string
+      avatar_url:
+        type: string
+      email:
+        type: string
+      location:
+        type: string
+      bio:
+        type: string
+      created_at:
+        type: string
+      followers:
+        type: integer
+      following:
+        type: integer
+
+  GithubUserRepository:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      full_name:
+        type: string
+      forks_count:
+        type: integer
+      stargazers_count:
+        type: integer
